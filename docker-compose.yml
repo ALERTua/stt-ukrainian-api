@@ -1,7 +1,7 @@
 services:
   api:
     build: .
-    # image: ghcr.io/alertua/stt_ukrainian_api:latest
+    # image: ghcr.io/alertua/stt-ukrainian-api:latest
     container_name: ${CONTAINER_PREFIX}api
     environment:
       - GRADIO_URL=http://${CONTAINER_PREFIX}gradio:${GRADIO_PORT}

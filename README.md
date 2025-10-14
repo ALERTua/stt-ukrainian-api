@@ -38,7 +38,7 @@ docker run -d \
   --name stt-ukrainian-api \
   -p 8000:8000 \
   -e GRADIO_URL=http://gradio:7861 \
-  ghcr.io/alertua/stt_ukrainian_api:latest
+  ghcr.io/alertua/stt-ukrainian-api:latest
 ```
 
 You can also deploy the Gradio App the way you like and just point this application to it using the `GRADIO_URL` environment variable.
