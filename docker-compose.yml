@@ -1,0 +1,20 @@
+services:
+  api:
+    build: .
+    # image: ghcr.io/alertua/stt_ukrainian_api:latest
+    container_name: ${CONTAINER_PREFIX}api
+    environment:
+      - GRADIO_URL=http://${CONTAINER_PREFIX}gradio:${GRADIO_PORT}
+      - UVICORN_PORT=${UVICORN_PORT}
+      - UVICORN_HOST=${UVICORN_HOST}
+    ports:
+      - ${UVICORN_PORT}:${UVICORN_PORT}
+
+  gradio:
+    image: ghcr.io/alertua/stt_ukrainian_docker:latest
+    container_name: ${CONTAINER_PREFIX}gradio
+    environment:
+      - PORT=${GRADIO_PORT}
+      - GRADIO_SERVER_NAME=${UVICORN_HOST}
+    ports:
+      - ${GRADIO_PORT}:${GRADIO_PORT}
