@@ -4,17 +4,26 @@ services:
     # image: ghcr.io/alertua/stt-ukrainian-api:latest
     container_name: ${CONTAINER_PREFIX}api
     environment:
-      - GRADIO_URL=http://${CONTAINER_PREFIX}gradio:${GRADIO_PORT}
+      - GRADIO_URL=http://${CONTAINER_PREFIX}gradio:${GRADIO_SERVER_PORT}
       - UVICORN_PORT=${UVICORN_PORT}
       - UVICORN_HOST=${UVICORN_HOST}
     ports:
       - ${UVICORN_PORT}:${UVICORN_PORT}
+    depends_on:
+      gradio:
+        condition: service_healthy
 
   gradio:
     image: ghcr.io/alertua/stt_ukrainian_docker:latest
     container_name: ${CONTAINER_PREFIX}gradio
     environment:
-      - PORT=${GRADIO_PORT}
+      - GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
       - GRADIO_SERVER_NAME=${UVICORN_HOST}
     ports:
-      - ${GRADIO_PORT}:${GRADIO_PORT}
+      - ${GRADIO_SERVER_PORT}:${GRADIO_SERVER_PORT}
+    healthcheck:
+      test: python -c "import sys, http.client; c=http.client.HTTPConnection('127.0.0.1', ${GRADIO_SERVER_PORT}, timeout=5); c.request('HEAD', '/'); r=c.getresponse(); sys.exit(0 if r.status==200 else 1)"
+      interval: 15s
+      timeout: 5s
+      start_period: 3s
+      retries: 300

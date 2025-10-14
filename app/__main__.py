@@ -23,7 +23,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-GRADIO_URL = os.getenv("GRADIO_URL", "http://gradio:7861")
+GRADIO_URL = os.getenv("GRADIO_URL", "http://gradio:7860")
 UVICORN_PORT = int(os.getenv("UVICORN_PORT", "8000"))
 UVICORN_HOST = os.getenv("UVICORN_HOST", "0.0.0.0")
 

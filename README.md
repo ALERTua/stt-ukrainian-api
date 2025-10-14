@@ -20,10 +20,10 @@ By better option I mean a model of at least the same quality but in Wyoming-comp
 
 ### Docker-compose Environment Variables
 
-- `GRADIO_URL`: URL of the Gradio Web UI (default: http://gradio:7861)
+- `GRADIO_URL`: URL of the Gradio Web UI (default: http://gradio:7860)
 - `UVICORN_PORT`: port for the OpenAI STT API (default: 8000)
 - `UVICORN_HOST`: listen interface for the OpenAI STT API (default: 0.0.0.0)
-- `GRADIO_PORT`: port for Gradio Web UI (default: 7861)
+- `GRADIO_PORT`: port for Gradio Web UI (default: 7860)
 - `GRADIO_SERVER_NAME`: listen interface for the Gradio App (default: 0.0.0.0)
 
 
@@ -37,7 +37,7 @@ Alternatively, you can run the container directly:
 docker run -d \
   --name stt-ukrainian-api \
   -p 8000:8000 \
-  -e GRADIO_URL=http://gradio:7861 \
+  -e GRADIO_URL=http://gradio:7860 \
   ghcr.io/alertua/stt-ukrainian-api:latest
 ```
 
