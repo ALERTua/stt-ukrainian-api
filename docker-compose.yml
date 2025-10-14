@@ -3,10 +3,8 @@ services:
     build: .
     # image: ghcr.io/alertua/stt-ukrainian-api:latest
     container_name: ${CONTAINER_PREFIX}api
-    environment:
-      - GRADIO_URL=http://${CONTAINER_PREFIX}gradio:${GRADIO_SERVER_PORT}
-      - UVICORN_PORT=${UVICORN_PORT}
-      - UVICORN_HOST=${UVICORN_HOST}
+    env_file:
+      - .env
     ports:
       - ${UVICORN_PORT}:${UVICORN_PORT}
     depends_on:
@@ -16,9 +14,8 @@ services:
   gradio:
     image: ghcr.io/alertua/stt_ukrainian_docker:latest
     container_name: ${CONTAINER_PREFIX}gradio
-    environment:
-      - GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
-      - GRADIO_SERVER_NAME=${UVICORN_HOST}
+    env_file:
+      - .env
     ports:
       - ${GRADIO_SERVER_PORT}:${GRADIO_SERVER_PORT}
     healthcheck:
@@ -27,3 +24,11 @@ services:
       timeout: 5s
       start_period: 3s
       retries: 300
+
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
