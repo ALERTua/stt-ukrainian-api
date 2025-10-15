@@ -1,7 +1,7 @@
 services:
   api:
-    build: .
-    # image: ghcr.io/alertua/stt-ukrainian-api:latest
+#    build: .
+    image: ghcr.io/alertua/stt-ukrainian-api:latest
     container_name: ${CONTAINER_PREFIX}api
     env_file:
       - .env
