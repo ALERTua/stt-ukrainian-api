@@ -6,6 +6,7 @@ services:
     env_file:
       - .env
     ports:
+      # host_port:container_port
       - ${UVICORN_PORT}:${UVICORN_PORT}
     depends_on:
       gradio:
@@ -17,6 +18,7 @@ services:
     env_file:
       - .env
     ports:
+      # host_port:container_port
       - ${GRADIO_SERVER_PORT}:${GRADIO_SERVER_PORT}
     healthcheck:
       test: python -c "import sys, http.client; c=http.client.HTTPConnection('127.0.0.1', ${GRADIO_SERVER_PORT}, timeout=5); c.request('HEAD', '/'); r=c.getresponse(); sys.exit(0 if r.status==200 else 1)"
@@ -25,10 +27,11 @@ services:
       start_period: 3s
       retries: 300
 
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
+#     # uncomment this block to use the NVIDIA GPU
+#     deploy:
+#       resources:
+#         reservations:
+#           devices:
+#             - driver: nvidia
+#               count: 1
+#               capabilities: [gpu]
