@@ -1,28 +1,25 @@
 """Test script for STT API transcription endpoint."""
 
+import os
+from pathlib import Path
+
+# noinspection PyPackageRequirements
 import requests
 
-def test_transcription(audio_file_path: str, api_url: str = "http://127.0.0.1:8000"):
-    """Test the transcription endpoint."""
-    with open(audio_file_path, "rb") as f:
+
+def test_real_wav():
+    audio_file_path: Path = (Path(__file__).parent / "test_audio.mp3").resolve()
+    api_url: str = f"http://127.0.0.1:{os.getenv('UVICORN_PORT', "8080")}"
+    expected_text: str = "за інформацією від державної служби з надзвичайних ситуацій станом на сьому ранку п'ятнадцятого липня"
+
+    with audio_file_path.open("rb") as f:
         response = requests.post(
             f"{api_url}/v1/audio/transcriptions",
             files={"file": f},
-            data={
-                "model": "whisper-1",
-                "response_format": "json"
-            }
+            data={"model": "whisper-1", "response_format": "json"},
+            timeout=30,
         )
-
-    print(f"Status: {response.status_code}")
-    print(f"Response: {response.json()}")
-    return response.json()
-
-
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) < 2:
-        print("Usage: python test_transcription.py <audio_file_path>")
-        sys.exit(1)
-
-    test_transcription(sys.argv[1])
+    assert response.status_code == 200  # noqa: PLR2004
+    assert expected_text in response.json()["text"], (
+        f"Expected text not found in response: {response.json()["text"]}"
+    )

@@ -3,14 +3,15 @@ name = "stt-ukrainian-api"
 version = "0"
 description = ""
 readme = "README.md"
-requires-python = "==3.13.*"
+requires-python = "==3.14.*"
 dependencies = [
-    "fastapi>=0.115.12",
-    "gradio-client>=1.8.0",
-    "python-dotenv>=1.1.0",
-    "python-multipart>=0.0.20",
-    "uvicorn>=0.34.0",
-    "wyoming>=1.5.3",
+    "fastapi",
+    "gradio-client",
+    "pyrefly>=0.60.0",
+    "python-dotenv",
+    "python-multipart",
+    "uvicorn",
+    "wyoming",
 ]
 
 #[tool.uv.workspace]
@@ -18,9 +19,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pre-commit-uv>=4.2.0",
-    "pytest>=8.3.5",
-    "ruff>=0.11.4",
+    "pre-commit-uv",
+    "pytest",
+    "ruff",
+    "requests",
 ]
 
 [tool.pytest.ini_options]
