@@ -19,6 +19,7 @@ on:
       - "tests/"
       - ".github/"
       - "media/"
+      - "*.example"
 
 
 env:
