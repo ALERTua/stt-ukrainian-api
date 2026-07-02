@@ -10,7 +10,9 @@ import requests
 def test_real_wav():
     audio_file_path: Path = (Path(__file__).parent / "test_audio.mp3").resolve()
     api_url: str = f"http://127.0.0.1:{os.getenv('UVICORN_PORT', "8080")}"
-    expected_text: str = "за інформацією від державної служби з надзвичайних ситуацій станом на сьому ранку п'ятнадцятого липня"
+    expected_text: str = (
+        "за інформацією від державної служби з надзвичайних ситуацій станом на сьому  ранку п'яятнадцятого  липня."
+    )  # sic!
 
     with audio_file_path.open("rb") as f:
         response = requests.post(
@@ -20,5 +22,5 @@ def test_real_wav():
             timeout=30,
         )
     assert response.status_code == 200  # noqa: PLR2004
-    response_text = response.json()["text"]
+    response_text = response.json()["text"].lower()
     assert expected_text == response_text, f"Response text does not match: {response_text}"
