@@ -20,6 +20,5 @@ def test_real_wav():
             timeout=30,
         )
     assert response.status_code == 200  # noqa: PLR2004
-    assert expected_text in response.json()["text"], (
-        f"Expected text not found in response: {response.json()["text"]}"
-    )
+    response_text = response.json()["text"]
+    assert expected_text == response_text, f"Response text does not match: {response_text}"
