@@ -25,6 +25,11 @@ By better option I mean a model of at least the same quality but in Wyoming-comp
 - `UVICORN_HOST`: listen interface for the OpenAI STT API (default: 0.0.0.0)
 - `GRADIO_PORT`: port for Gradio Web UI (default: 7860)
 - `GRADIO_SERVER_NAME`: listen interface for the Gradio App (default: 0.0.0.0)
+- `PUID`: user ID the API container runs as (default: 1000)
+- `PGID`: group ID the API container runs as (default: 1000)
+- `UV_OVERRIDE`: path INSIDE the gradio container to a file with package version overrides (e.g. PyTorch builds for older/newer GPUs). Put the file into the data volume (`./stt_ukrainian_data/user_requirements.txt` → `/data/user_requirements.txt`). Optional (default: None)
+- `UV_EXTRA_INDEX_URL`: extra package index for the overrides above, e.g. https://download.pytorch.org/whl/cu126. Optional (default: None)
+- `UV_CACHE_DIR`: uv download cache directory INSIDE the container. Defaults to `/data/uv_cache` in the gradio image (persistent, lives in the data volume). To share one uv cache between projects, bind a host directory over it in docker-compose.yml instead of changing this variable
 
 
 ### Deployment

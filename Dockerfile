@@ -1,5 +1,8 @@
 FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS production
 
+ARG PUID=1000
+ARG PGID=1000
+
 LABEL maintainer="ALERT <alexey.rubasheff@gmail.com>"
 
 ENV \
@@ -15,7 +18,9 @@ ENV \
     UV_LINK_MODE=copy \
     UV_FROZEN=1 \
     UV_NO_PROGRESS=true \
-    UV_CACHE_DIR=.uv_cache \
+    UV_NO_DEV=true \
+    # writable for any PUID at runtime; used as a cache mount during build
+    UV_CACHE_DIR=/tmp/uv-cache \
     # Python
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -31,6 +36,9 @@ ENV \
 
 WORKDIR $APP_DIR
 
+RUN groupadd --gid ${PGID} appuser \
+    && useradd --uid ${PUID} --gid ${PGID} --no-log-init --create-home appuser
+
 RUN --mount=type=cache,target=$UV_CACHE_DIR \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
@@ -41,6 +49,10 @@ COPY . .
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=5 \
         CMD python -c "import urllib.request as u; u.urlopen('http://127.0.0.1:${UVICORN_PORT}/health', timeout=1)"
 
+ENV HOME=/tmp
+
+USER ${PUID}:${PGID}
+
 ENTRYPOINT []
 
-CMD uv run uvicorn $SOURCE_DIR_NAME.__main__:app --host ${UVICORN_HOST} --port ${UVICORN_PORT}
+CMD ["sh", "-c", "exec uv run --no-sync uvicorn ${SOURCE_DIR_NAME}.__main__:app --host ${UVICORN_HOST} --port ${UVICORN_PORT}"]
